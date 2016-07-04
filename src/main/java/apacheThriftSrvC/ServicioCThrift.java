@@ -7,9 +7,7 @@ import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 
-
-
-public class ServicioCThrift implements ThriftService.Iface {
+public class ServicioCThrift {
 
 	public static ServicioCThrift servicioC;
 
