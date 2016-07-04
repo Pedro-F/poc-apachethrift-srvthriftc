@@ -1,33 +1,38 @@
 package apacheThriftSrvC;
 
-import java.util.Map;
+public class RequestMessageStock{
 
-public class RequestMessageStock {
+	private String nombre;
+	private String color;
+	private String talla;
 
-	public Map<String, String> cabecera; // required
-	public Map<String, String> cuerpo; // required
-	
-	public RequestMessageStock(){
-		super();
-	}
-
-	public RequestMessageStock(Map<String,String> cabecera, Map<String,String> cuerpo){
-		    super();
-		    this.cabecera = cabecera;
-		    this.cuerpo = cuerpo;
-	}
-
-	public Map<String,String> getCabecera() {
-	    return this.cabecera;
+	public String getNombre() {
+		return nombre;
 	}
 	
-	public Map<String,String> getCuerpo() {
-	    return this.cuerpo;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getColor() {
+		return color;
+	}
+	
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getTalla() {
+		return talla;
+	}
+	
+	public void setTalla(String talla) {
+		this.talla = talla;
 	}
 
 	@Override
-	public String toString() {
-		return "[nombre=" + cuerpo.get("nombre") + ", color=" + cuerpo.get("color") + ", talla=" + cuerpo.get("talla") + "]";
+	public String toString(){
+		return "[nombre=" + nombre + ", color=" + color + ", talla=" + talla+ "]";
 	}
-
+	
 }

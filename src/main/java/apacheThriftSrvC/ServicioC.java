@@ -26,18 +26,17 @@ public class ServicioC {
 		
 		// Variables
 		long iniTime = System.currentTimeMillis();
-		RespuestaNoThriftStock respuestaNoThriftStock = new RespuestaNoThriftStock(requestMessageStock.getCabecera(),"0");
+		RespuestaNoThriftStock respuestaNoThriftStock = new RespuestaNoThriftStock();
+		respuestaNoThriftStock.setStock("0");
 
 		// Obtenemos el mapa de prendas filtrado por el nombre y color solicitados para retornar el stock
-		Map<String, Map<String,String>> stockPrenda = stock.get(requestMessageStock.getCuerpo().get("nombre"));
+		Map<String, Map<String,String>> stockPrenda = stock.get(requestMessageStock.getNombre());
 		if(stockPrenda!=null){
-			Map<String, String> stockColor = stockPrenda.get(requestMessageStock.getCuerpo().get("color"));
+			Map<String, String> stockColor = stockPrenda.get(requestMessageStock.getColor());
 			if(stockColor!=null){
-				String cantidad = stockColor.get(requestMessageStock.getCuerpo().get("talla"));
+				String cantidad = stockColor.get(requestMessageStock.getTalla());
 				if(cantidad!=null){
-					Map<String, String> stock = new HashMap<String, String>();
-					stock.put("stock", cantidad);
-					respuestaNoThriftStock.setCuerpo(stock);
+					respuestaNoThriftStock.setStock(cantidad);
 				}
 			}
 		}
