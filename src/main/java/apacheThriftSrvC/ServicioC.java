@@ -1,6 +1,5 @@
 package apacheThriftSrvC;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.Servlet;
@@ -11,16 +10,7 @@ import org.apache.thrift.server.TServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import apacheThriftSrvB.ServicioBThrift;
-import apacheThriftSrvB.ThriftService;
-import apacheThriftSrvC.ServicioCThrift;
-import apacheThriftSrvC.ThriftServiceStock;
 
 @RestController
 @EnableAutoConfiguration
@@ -90,7 +80,7 @@ public class ServicioC {
 		
 		try {
 			servicioC = new ServicioCThrift();
-			processor = new ThriftService.Processor(servicioC);
+			processor = new ThriftServiceStock.Processor(servicioC);
 			Runnable simple = new Runnable() {
 				public void run() {
 					simple(processor);
