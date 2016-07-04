@@ -5,15 +5,23 @@ import java.util.Map;
 import javax.servlet.Servlet;
 
 import org.apache.thrift.protocol.TCompactProtocol;
+import org.apache.thrift.protocol.TJSONProtocol;
 import org.apache.thrift.protocol.TProtocolFactory;
+import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TServlet;
+import org.apache.thrift.server.TThreadPoolServer;
+import org.apache.thrift.transport.TFramedTransport;
+import org.apache.thrift.transport.TServerSocket;
+import org.apache.thrift.transport.TServerTransport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.ComponentScan;
 
-@RestController
+
+
 @EnableAutoConfiguration
+@ComponentScan
 public class ServicioC {
 
 	Map<String, Map<String, Map<String,String>>> stock;
@@ -41,33 +49,6 @@ public class ServicioC {
     }
 
 	
-	
-//	@RequestMapping(value = "/servicioC", method = RequestMethod.POST)
-//	public @ResponseBody RespuestaNoThriftStock servicioC(@RequestBody RequestMessageStock requestMessageStock) {
-//		
-//		// Variables
-//		long iniTime = System.currentTimeMillis();
-//		RespuestaNoThriftStock respuestaNoThriftStock = new RespuestaNoThriftStock();
-//		respuestaNoThriftStock.setStock("0");
-//
-//		// Obtenemos el mapa de prendas filtrado por el nombre y color solicitados para retornar el stock
-//		Map<String, Map<String,String>> stockPrenda = stock.get(requestMessageStock.getNombre());
-//		if(stockPrenda!=null){
-//			Map<String, String> stockColor = stockPrenda.get(requestMessageStock.getColor());
-//			if(stockColor!=null){
-//				String cantidad = stockColor.get(requestMessageStock.getTalla());
-//				if(cantidad!=null){
-//					respuestaNoThriftStock.setStock(cantidad);
-//				}
-//			}
-//		}
-//		
-//		// Traza de fin del servicio
-//		System.out.println("FIN ServicioC.  ts = {" + (System.currentTimeMillis() - iniTime) + "}");
-//		
-//		return respuestaNoThriftStock;
-//	}
-	
 	/*******************************************
 	 * MAIN *
 	 * 
@@ -92,5 +73,34 @@ public class ServicioC {
 		}
 		
 		SpringApplication.run(ServicioC.class, args);
+	}
+	
+	public static void simple(ThriftServiceStock.Processor processor) {
+		try {
+
+			/*TServerTransport serverTransport = new TServerSocket(9092);
+			//TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
+			
+			TThreadPoolServer.Args serverArgs = new TThreadPoolServer.Args(serverTransport);
+			serverArgs.processor(processor);
+			TServer server =  new TThreadPoolServer(serverArgs);*/
+			TServerTransport serverTransport = new TServerSocket(9093);
+			TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport)
+			            .processor(processor).protocolFactory(new TJSONProtocol.Factory())
+			            .inputTransportFactory(new TFramedTransport.Factory())
+			            .outputTransportFactory(new TFramedTransport.Factory()));
+			System.out.println("Arrancando servidor...");
+			server.serve();
+			
+			
+			/**TNonblockingServerTransport serverTransport = new TNonblockingServerSocket(9092);
+			TServer server = new TNonblockingServer(new TNonblockingServer.Args(serverTransport)
+					.processor(processor).transportFactory(new TFramedTransport.Factory(256 * 1024 * 1024))
+                    .protocolFactory(new TBinaryProtocol.Factory()));
+			
+			server.serve();*/
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
