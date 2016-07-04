@@ -44,7 +44,7 @@ public class ServicioC {
     }
     
     @Bean
-    public Servlet servicioB(TProtocolFactory protocolFactory, ServicioCThrift handler) {
+    public Servlet servicioC(TProtocolFactory protocolFactory, ServicioCThrift handler) {
         return new TServlet(new ThriftServiceStock.Processor<ServicioCThrift>(handler), protocolFactory);
     }
 
