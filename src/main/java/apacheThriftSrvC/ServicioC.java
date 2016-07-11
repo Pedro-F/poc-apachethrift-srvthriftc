@@ -84,13 +84,17 @@ public class ServicioC {
 			TThreadPoolServer.Args serverArgs = new TThreadPoolServer.Args(serverTransport);
 			serverArgs.processor(processor);
 			TServer server =  new TThreadPoolServer(serverArgs);*/
+			System.out.println("Arrancando servidor...");
 			TServerTransport serverTransport = new TServerSocket(9095);
+			System.out.println("soket creado servidor...");
 			TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport)
 			            .processor(processor).protocolFactory(new TJSONProtocol.Factory())
 			            .inputTransportFactory(new TFramedTransport.Factory())
 			            .outputTransportFactory(new TFramedTransport.Factory()));
-			System.out.println("Arrancando servidor...");
+			System.out.println("socketServer creado servidor...");
 			server.serve();
+			System.out.println("soket esperando peticiones");
+
 			
 			
 			/**TNonblockingServerTransport serverTransport = new TNonblockingServerSocket(9092);
@@ -100,6 +104,7 @@ public class ServicioC {
 			
 			server.serve();*/
 		} catch (Exception e) {
+			System.out.println("Error Arrancando servidor...");
 			e.printStackTrace();
 		}
 	}
