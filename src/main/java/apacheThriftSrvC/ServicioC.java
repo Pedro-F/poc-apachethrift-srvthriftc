@@ -35,7 +35,6 @@ public class ServicioC {
 	}
 	
 	
-
     @Bean
     public TProtocolFactory tProtocolFactory() {
         //We will use binary protocol, but it's possible to use JSON and few others as well
