@@ -1,9 +1,7 @@
 package apacheThriftSrvC;
 
 import java.util.Map;
-
 import javax.servlet.Servlet;
-
 import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.protocol.TJSONProtocol;
 import org.apache.thrift.protocol.TProtocolFactory;
@@ -28,7 +26,7 @@ public class ServicioC {
 
 	public static ServicioCThrift servicioC;
 
-	public static ThriftServiceStock.Processor processor;
+	public static ThriftServiceStock.Processor<ServicioCThrift> processor;
 
 	public ServicioC() {
 		stock = StockDao.instance.getStock();
@@ -60,7 +58,7 @@ public class ServicioC {
 		
 		try {
 			servicioC = new ServicioCThrift();
-			processor = new ThriftServiceStock.Processor(servicioC);
+			processor = new ThriftServiceStock.Processor<ServicioCThrift>(servicioC);
 			Runnable simple = new Runnable() {
 				public void run() {
 					simple(processor);
@@ -74,15 +72,9 @@ public class ServicioC {
 		SpringApplication.run(ServicioC.class, args);
 	}
 	
-	public static void simple(ThriftServiceStock.Processor processor) {
+	public static void simple(ThriftServiceStock.Processor<ServicioCThrift> processor) {
 		try {
 
-			/*TServerTransport serverTransport = new TServerSocket(9092);
-			//TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
-			
-			TThreadPoolServer.Args serverArgs = new TThreadPoolServer.Args(serverTransport);
-			serverArgs.processor(processor);
-			TServer server =  new TThreadPoolServer(serverArgs);*/
 			System.out.println("Arrancando servidor...");
 			TServerTransport serverTransport = new TServerSocket(9095);
 			System.out.println("soket creado servidor...");
@@ -93,15 +85,7 @@ public class ServicioC {
 			System.out.println("socketServer creado servidor...");
 			server.serve();
 			System.out.println("soket esperando peticiones");
-
 			
-			
-			/**TNonblockingServerTransport serverTransport = new TNonblockingServerSocket(9092);
-			TServer server = new TNonblockingServer(new TNonblockingServer.Args(serverTransport)
-					.processor(processor).transportFactory(new TFramedTransport.Factory(256 * 1024 * 1024))
-                    .protocolFactory(new TBinaryProtocol.Factory()));
-			
-			server.serve();*/
 		} catch (Exception e) {
 			System.out.println("Error Arrancando servidor...");
 			e.printStackTrace();
